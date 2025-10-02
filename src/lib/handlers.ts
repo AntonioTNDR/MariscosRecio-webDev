@@ -2,6 +2,7 @@ import Products, { Product } from '@/models/Product';
 import connect from '@/lib/mongoose';
 import { Types } from 'mongoose';
 import Users, { User, CartItem } from '@/models/User';
+import Order from '@/models/Order';
 
 //Error response interface
 export interface ErrorResponse {
@@ -96,4 +97,29 @@ export async function getUser(
   const user = await Users.findById(userId, userProjection)
 
   return user
+}
+
+//Get cart items response interface
+export interface GetCartItemsResponse extends Pick<Product, 'name' | 'price' | 'image'> {
+  _id: Types.ObjectId
+}
+
+//Get cart items function
+export async function getCart(
+  userId: Types.ObjectId | string
+): Promise<GetUserResponse | null> { //Return null if user not found
+  await connect()
+
+  //Get user from database
+  const userProjection = {
+    cartItems: true,
+    _id: false
+  }
+  //Query user by id
+  //This is basically like a join in SQL
+  const cart = await Users.findById(userId, userProjection).populate('cartItems.product');
+
+   
+
+  return cart
 }

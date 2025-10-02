@@ -10,8 +10,8 @@ export async function GET(
     params: { userId: string }
   }
 ): Promise<NextResponse<GetUserResponse> | NextResponse<ErrorResponse>> {
-  if (!Types.ObjectId.isValid(params.userId)) {
-    return NextResponse.json(
+  if (!Types.ObjectId.isValid(params.userId)) { //Check if userId is a valid ObjectId
+    return NextResponse.json( //Return 400 if not
       {
         error: 'WRONG_PARAMS',
         message: 'Invalid user ID.',
