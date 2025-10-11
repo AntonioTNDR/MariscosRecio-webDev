@@ -29,7 +29,7 @@ export async function PUT(
       return new Response('User not found', { status: 404 });
     }
 
-    const payload = JSON.stringify({ cartItems: result.cartItems});
+    const payload = JSON.stringify({ cartItems: result});
 
     //201 when a new item is added
     if('isNewItem' in result && result.isNewItem) {
