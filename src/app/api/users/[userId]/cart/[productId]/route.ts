@@ -96,9 +96,11 @@ export async function DELETE(
   }
 
   //Call deleteFromCart function
-  const success = await deleteFromCart(params.userId, params.productId);
+  const success = await deleteFromCart(params.userId, params.productId); //The return type of this is either null or the updated cart
 
-  if (!success) {
+  //If null, either user or product was not found
+
+  if (success === null) {
     return NextResponse.json({
         error: 'NOT_FOUND',
         message: 'User not found or product not found.',
@@ -106,5 +108,5 @@ export async function DELETE(
       { status: 404 });
   }
 
-  return NextResponse.json(success);
+  return NextResponse.json(success); //return the updated cart (the operation has been successful)
 }
