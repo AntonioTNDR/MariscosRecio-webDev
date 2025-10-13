@@ -124,7 +124,7 @@ export async function getCart(
   return cart
 }
 
-//PUT cart function
+//PUT cart function (DO LATER)
 
 //Response interface for cart 
 export interface CartProductResponse {
@@ -218,3 +218,20 @@ export async function putQty(
 
   return refreshed;
 }
+
+//DELETE product from cart
+
+export async function deleteFromCart(userId: Types.ObjectId | string, productId: Types.ObjectId | string): Promise<boolean> {
+  await connect()
+
+  const user = await Users.findById(userId)
+  const product = await Products.findById(productId)
+  if(!product) return false
+  if (!user) return false
+
+  user.cartItems = user.cartItems.filter(item => item.product._id !== productId)
+
+  await user.save()
+  return true
+}
+

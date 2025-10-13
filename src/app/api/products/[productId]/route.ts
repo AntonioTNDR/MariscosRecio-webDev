@@ -1,4 +1,4 @@
-import { ErrorResponse, getProducts, GetProductsResponse } from '@/lib/handlers'
+import { ErrorResponse, getProducts, GetProductsResponse, deleteFromCart } from '@/lib/handlers'
 import { NextRequest, NextResponse } from 'next/server'
 import { Types } from 'mongoose'
 
