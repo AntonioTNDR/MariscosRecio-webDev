@@ -246,3 +246,97 @@ export async function deleteFromCart(userId: Types.ObjectId | string, productId:
   return cart;
 }
 
+
+
+//Create Order response interface
+export interface CreateOrderResponse {
+  _id: Types.ObjectId
+}
+
+//ORDERS PART
+
+//Create order function
+export async function createOrder(userId: Types.ObjectId | string, order: { 
+  date: Date;
+  address: string;
+  cardHolder: string;
+  cardNumber: string;
+}): Promise<CreateOrderResponse | null> { //Return null if user not found
+  await connect();
+
+  //Check if user exists
+  const user = await Users.findById(userId);
+  if (!user) return null;
+  if(user.cartItems.length === 0){
+    return null; //Cannot create order with empty cart
+  }
+
+  //Create order document
+  
+
+  //Get user from database
+  const userProjection = {
+    cartItems: true,
+    _id: false
+  }
+
+  //We have to create some interfaces to make TypeScript happy
+  interface PopulatedProduct{
+    _id: Types.ObjectId
+    name: string
+    price: number
+    image: string
+    description: string
+  }
+
+  interface PopulatedCartItem {
+    product: PopulatedProduct
+    qty: number
+  }
+
+  //IMPORTANT
+  //After populating, we will get an array of cart items with products
+  //THEN we can use the PopulatedCartItem interface to see each product, as if we were seeing it in the cart page
+  //Afterwards, since product is of type PopulatedProduct, we can access the details of each product in the cart
+  interface PopulatedCart {
+    cartItems: PopulatedCartItem[]
+  }
+  //Query user by id
+  //This is basically like a join in SQL
+  //We have to cast it to PopulatedCart so TS knows what we're doing
+  const cart = await Users.findById(userId, userProjection).populate('cartItems.product') as PopulatedCart | null;
+
+  //If the cart is empty, return null and do error handling in the route
+  if(!cart) return null;
+
+  const orderItems = cart.cartItems.map(item => ({
+    product: item.product._id,   
+    qty: item.qty,
+    price: item.product.price    //You see the three interfaces above? Yeah this is the reason why we created them
+  }))
+
+  //Create order document
+  const orderDoc = {
+    ...order,
+    date: new Date(order.date),
+    orderItems: orderItems,
+  };
+
+  //Create order in database
+  const newOrder = await Order.create(orderDoc);
+
+  //Empty the cart after creating the order
+  user.cartItems = [];
+  //Save changes to the DB
+  await user.save();
+
+  //Done!
+  return {
+    _id: newOrder._id
+  };
+}
+
+//get orders function
+export async function getOrder(userId: Types.ObjectId | string) {
+  
+}
