@@ -2,7 +2,7 @@ import Products, { Product } from '@/models/Product';
 import connect from '@/lib/mongoose';
 import { Types } from 'mongoose';
 import Users, { User, CartItem } from '@/models/User';
-import Order from '@/models/Order';
+import Orders, {Order} from '@/models/Order';
 
 //Error response interface
 export interface ErrorResponse {
@@ -312,7 +312,7 @@ export async function createOrder(userId: Types.ObjectId | string, order: {
   const orderItems = cart.cartItems.map(item => ({
     product: item.product._id,   
     qty: item.qty,
-    price: item.product.price    //You see the three interfaces above? Yeah this is the reason why we created them
+    price: item.product.price * item.qty    //You see the three interfaces above? Yeah this is the reason why we created them
   }))
 
   //Create order document
@@ -323,8 +323,7 @@ export async function createOrder(userId: Types.ObjectId | string, order: {
   };
 
   //Create order in database
-  const newOrder = await Order.create(orderDoc);
-
+  const newOrder = await Orders.create(orderDoc);
   //Empty the cart after creating the order
   user.cartItems = [];
   //Save changes to the DB
@@ -336,7 +335,53 @@ export async function createOrder(userId: Types.ObjectId | string, order: {
   };
 }
 
+
+interface GetOrderResponse extends Pick<Order, 'date' | 'address' | 'cardHolder' | 'orderItems'> {
+  _id: Types.ObjectId
+}
+
+interface OrderItemResponse extends Pick<Order['orderItems'][0], 'qty' | 'price'> {
+  product: CartProductResponse
+}
+
 //get orders function
-export async function getOrder(userId: Types.ObjectId | string) {
+export async function getOrder(userId: Types.ObjectId | string): Promise<GetUserResponse | null> { //Return null if user not found
+  await connect() // we connect to the database
   
+  const orderProjection = { //We only need to return orders
+    orders: true,
+    _id: false
+  }
+
+  const orders = await Users.findById(userId, orderProjection).populate('orders');
+  if(!orders) return null;
+  return orders
+}
+
+//Find an existing order of an existing user by ID.
+export interface GetSingleOrderResponse extends Order {
+  _id: Types.ObjectId
+}
+
+export async function getSingleOrder(
+  userId: Types.ObjectId | string,
+  orderId: Types.ObjectId | string
+): Promise<GetSingleOrderResponse | null> { //Return null if user or order not found
+  await connect() // we connect to the database
+
+  //Validate Ids
+  if (!Types.ObjectId.isValid(userId) || !Types.ObjectId.isValid(orderId)) {
+    throw new Error('Invalid user ID or order ID');
+  }
+
+  //Check if user exists
+  const user = await Users.findById(userId);
+  if (!user) return null;
+
+  //Join and all of that (I'm very tired)
+  const orderDoc = await Orders.findById(orderId).populate('orderItems.product');
+
+  if (!orderDoc) return null;
+
+  return orderDoc;
 }

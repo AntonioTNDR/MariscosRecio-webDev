@@ -1,7 +1,6 @@
 import { Types } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 import { deleteFromCart, ErrorResponse, putQty, GetProductsResponse, getCart, GetUserResponse } from '@/lib/handlers'
-import next from 'next';
 
 
 export async function PUT(
