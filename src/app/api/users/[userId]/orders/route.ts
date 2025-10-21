@@ -78,28 +78,46 @@ export async function POST(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userId: string, orderId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ): Promise<NextResponse<GetUserResponse> | NextResponse<ErrorResponse>> {
-  if(!Types.ObjectId.isValid(params.userId) || !Types.ObjectId.isValid(params.orderId)) { //Check if userId is a valid ObjectId
-    return NextResponse.json( //Return 400 if not
-      {
-        error: 'WRONG_PARAMS',
-        message: 'Invalid user ID or order ID.',
-      },
-      { status: 400 }
-    )
-  }
+  try {
+    // Await params (Next.js App Router requirement)
+    const { userId } = await params;
 
-  const order = await getOrder(params.userId);
-  if (order === null) {
+    // Validate user ID
+    if (!Types.ObjectId.isValid(userId)) {
+      return NextResponse.json(
+        {
+          error: 'WRONG_PARAMS',
+          message: 'Invalid user ID.',
+        },
+        { status: 400 }
+      )
+    }
+
+    // Get all orders for user
+    const orders = await getOrder(userId);
+    
+    if (orders === null) {
+      return NextResponse.json(
+        {
+          error: 'NOT_FOUND',
+          message: 'User not found.',
+        },
+        { status: 404 }
+      )
+    }
+    
+    return NextResponse.json(orders);
+
+  } catch (error) {
+    console.error('Error in GET /orders:', error);
     return NextResponse.json(
       {
-        error: 'NOT_FOUND',
-        message: 'User not found or order not found.',
+        error: 'SERVER_ERROR',
+        message: 'An unexpected error occurred.',
       },
-      { status: 404 }
+      { status: 500 }
     )
   }
-  return NextResponse.json(order);
 }
-
