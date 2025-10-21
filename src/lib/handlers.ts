@@ -239,24 +239,28 @@ export async function putQty(
 //DELETE product from cart
 
 export async function deleteFromCart(userId: Types.ObjectId | string, productId: Types.ObjectId | string): Promise<GetUserResponse | null> { //Return null if user and/or product not found
-  const userProjection = { //We only need to return cart items
-    cartItems: true,
-    _id: false
-  }  
   await connect()
 
   const user = await Users.findById(userId)
   const product = await Products.findById(productId)
-  if(!product) return null //If there is no product, we return null
-  if (!user) return null //Same with user
+  
+  if (!user) return null //If there is no user, we return null
+  if (!product) return null //If there is no product, we return null
 
   //This is what actually removes the item from the cart
-  user.cartItems = user.cartItems.filter(item => item.product._id !== productId)
+  //Convert both to strings for proper comparison
+  user.cartItems = user.cartItems.filter(
+    item => item.product.toString() !== productId.toString()
+  )
 
   //Save changes to the DB
   await user.save()
 
   //Query the DB again to get the updated cart (join operation -> user U product = cart with product details)
+  const userProjection = { //We only need to return cart items
+    cartItems: true,
+    _id: false
+  }
   const cart = await Users.findById(userId, userProjection).populate('cartItems.product');
 
   //Return the updated cart
