@@ -1,72 +1,73 @@
 import { Types } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
-import { deleteFromCart, ErrorResponse, putQty, GetProductsResponse, getCart, GetUserResponse } from '@/lib/handlers'
+import { deleteFromCart, ErrorResponse, putQty, GetProductsResponse, CartItemResponse, getCart, GetUserResponse } from '@/lib/handlers'
 
 
 export async function PUT(
   req: Request, //Request object
   { params }: { params: { userId: string; productId: string } }
-): Promise<NextResponse<{ cartItems: GetProductsResponse | { isNewItem: boolean } } | ErrorResponse>> { //Define return type, in this case either user or error response
-
-  const { userId, productId } = params;
-
-  //Parse JSON body safely
-  let body: unknown;
-  try {
-    body = await req.json();
-  } catch {
-    return new NextResponse("Invalid JSON body", { status: 400 });
-  }
-
-  //Extract quantity and validate it
-  const qty = Number ((body as { qty?: unknown })?.qty);
-  if(!Number.isInteger(qty) || qty <= 0) {
-    return new NextResponse('Quantity must be an integer greater than 0', { status: 400 });
-  }
+): Promise<NextResponse<{ cartItems: CartItemResponse[] } | ErrorResponse>> { //Define return type
 
   try{
+    const { userId, productId } = params;
+
+    const body = await req.json();
+    const qty = Number(body.qty);
+
+    //Validate quantity
+    if (!qty || qty <= 0) {
+      return NextResponse.json(
+        {
+          error: 'Quantity must be greater than zero.',
+          message: 'Quantity must be a positive number.',
+        },
+        { status: 400 }
+      )
+    }
+
     const result = await putQty(userId, productId, qty);
 
-    if(!result) {
-      return new NextResponse('User not found', { status: 404 });
+    //If null, user was not found
+    if (!result) {
+      return NextResponse.json(
+        {
+          error: 'NOT_FOUND',
+          message: 'User not found.',
+        },
+        { status: 404 }
+      )
     }
 
-    const payload = JSON.stringify({ cartItems: result});
+    // Determine status code: 201 for new item, 200 for update
+    const statusCode = result.isNewItem ? 201 : 200;
 
-    //201 when a new item is added
-    if('isNewItem' in result && result.isNewItem) {
-      return new NextResponse(payload, {
-        status: 201,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
+    // Return cart items (without isNewItem flag in response)
+    const response = { cartItems: result.cartItems };
 
-    //200 when an existing item is updated
-    return new NextResponse(payload, {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  } catch(err: unknown) {
-    const msg = String((err as Error)?.message || 'Internal Server Error');
-
-    //Map validation errors to 400
-    if(
-      msg === 'Invalid user ID' ||
-      msg === 'Invalid product ID' ||
-      msg === 'Quantity must be greater than 0'
-    ) {
-      return new NextResponse(msg, { status: 400 });
-    }
-
-    //Map not found errors to 404
-    if(msg === 'User not found' || msg === 'Product not found') {
-      return new NextResponse(msg, { status: 404 });
-    }
-
-    //Everything else is a 500 error
-    console.error('PUT /api/users/[userId]/cart/[productId] error:', err);
-    return new NextResponse('Internal Server Error', { status: 500 });
+    return NextResponse.json(response, { status: statusCode });
   }
+  catch (error) {
+    const message = (error as Error).message;
+
+    if (message === "Product not found") {
+      return NextResponse.json(
+        {
+          error: 'NOT_FOUND',
+          message: message,
+        },
+        { status: 404 }
+      )
+    }
+  }
+
+  //Generic server error
+  return NextResponse.json(
+    {
+      error: 'SERVER_ERROR',
+      message: 'An unexpected error occurred.',
+    },
+    { status: 500 }
+  );
 }
 
 //Defined in anex A: Remove a product from a user's cart

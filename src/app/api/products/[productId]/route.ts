@@ -1,4 +1,4 @@
-import { ErrorResponse, getProducts, GetProductsResponse, deleteFromCart } from '@/lib/handlers'
+import { ErrorResponse, getProducts, GetProductsResponse, deleteFromCart, getProductById } from '@/lib/handlers'
 import { NextRequest, NextResponse } from 'next/server'
 import { Types } from 'mongoose'
 
@@ -22,8 +22,9 @@ export async function GET(
     )
   }
 
+  //WORNG
   //Fetch product from database
-  const product = await getProducts();
+  const product = await getProductById(params.productId);
 
 
   //If the product does not exist, return 404

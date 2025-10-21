@@ -73,6 +73,23 @@ export async function getProducts(): Promise<GetProductsResponse> {
   }
 }
 
+export async function getProductById(
+  productId: Types.ObjectId | string
+): Promise<GetProductsResponse | null> { //Return null if product not found
+  await connect()
+
+  //Get product from database
+  const product = await Products.findById(productId)
+
+  if (!product) {
+    return null
+  }
+
+  return {
+    products: [product]
+  }
+}
+
 //Get user response interface
 export interface GetUserResponse
   extends Pick<User, 'email' | 'name' | 'surname' | 'address' | 'birthdate'> {
@@ -126,7 +143,7 @@ export async function getCart(
 
 //PUT cart function (DO LATER)
 
-//Response interface for cart 
+//Response interface for cart products
 export interface CartProductResponse {
   _id: Types.ObjectId
   name: string
@@ -135,88 +152,88 @@ export interface CartProductResponse {
   description: string
 }
 
-export interface CartItemsRespone {
+//Response interface for cart items
+export interface CartItemResponse {
   product: CartProductResponse
   qty: number
 }
 
-export interface ModifyCartResponse {
-  cartItems: CartItemsRespone[]
-  isNewItem: boolean
+//Response interface for cart
+export interface GetCartResponse {
+  cartItems: CartItemResponse[]
+  isNewItem: boolean // Internal flag to determine status code
 }
 
-//Update or insert a cart item quantity, and return only the cart
+//Update or insert a cart item quantity
 export async function putQty(
   userId: Types.ObjectId | string,
   productId: Types.ObjectId | string,
   qty: number
-): Promise<GetUserResponse | null> { //Return null if user not found
+): Promise<GetCartResponse | null> { //Return null if user not found
   await connect()
 
-  //for later use to return
-  const userProjection = {
-    cartItems: true,
-    _id: false
-  }
-  
-  const user = await Users.findById(userId, userProjection);
-
+  // 1. Find user and product
+  const user = await Users.findById(userId);
   const product = await Products.findById(productId);
 
-  // const [user, product] = await Promise.all([
-  //   Users.findById(userId),
-  //   Products.findById(productId)
-  // ]);
+  if (!user) return null;
+  if (!product) throw new Error('Product not found');
 
-  if(!user) return null;
-  if(!product) throw new Error('Product not found');
+  // 2. Check if product is already in cart
+  const existingCartItem = user.cartItems.find(
+    item => item.product.toString() === product._id.toString()
+  );
 
-  const cartObject = user.cartItems.find(item => item.product._id === product._id);
   let isNewItem = false;
 
-  if (!cartObject) {
-    //If not, add it to cart
+  if (existingCartItem) {
+    // Update existing item quantity
+    existingCartItem.qty = qty;
+  } else {
+    // Add new item to cart
     user.cartItems.push({ product: product._id, qty });
     isNewItem = true;
-  } else {
-    //If it is, update quantity
-    //qty must be > 0
-    cartObject.qty = qty;
   }
 
+  // 3. Save changes
   await user.save();
 
-  //Re-fetch cart with populated products
-  const refreshed = await Users.findById(userId, { cartItems: 1, _id: 0 }).populate({
+  // 4. Re-fetch cart with populated products (like a SQL JOIN)
+  interface PopulatedProduct {
+    _id: Types.ObjectId
+    name: string
+    price: number
+    image: string
+    description: string
+  }
+
+  interface PopulatedCartItem {
+    product: PopulatedProduct
+    qty: number
+  }
+
+  const refreshedUser = await Users.findById(userId, { cartItems: 1 }).populate({
     path: 'cartItems.product',
     select: 'name price image description'
-  })
+  });
 
-  if(!refreshed) return null;
+  if (!refreshedUser) return null;
 
+  // 5. Map to response format (cast to populated type first)
+  const populatedCart = refreshedUser.cartItems as unknown as PopulatedCartItem[];
   
-  //esto es lo raro
-  //Map cart items to response format
+  const cartItems: CartItemResponse[] = populatedCart.map(item => ({
+    product: {
+      _id: item.product._id,
+      name: item.product.name,
+      price: item.product.price,
+      img: item.product.image, // Rename image -> img
+      description: item.product.description
+    },
+    qty: item.qty
+  }));
 
-
-
-  //this is broken (tnks copilot)
-  // const cartItems: CartItemsRespone[] = items.map((ci) => {
-  //   const p = ci.product as unknown as PopulatedProduct;
-  //   return {
-  //     product: {
-  //       _id: p._id,
-  //       name: p.name,
-  //       price: p.price,
-  //       img: p.image,
-  //       description: p.description
-  //     },
-  //     qty: ci.qty
-  //   }
-  // })
-  // return { cartItems, isNewItem }
-
-  return refreshed;
+  return { cartItems, isNewItem };
 }
 
 //DELETE product from cart
