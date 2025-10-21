@@ -249,6 +249,8 @@ export async function deleteFromCart(userId: Types.ObjectId | string, productId:
 
   //This is what actually removes the item from the cart
   //Convert both to strings for proper comparison
+  //This is done because product is an ObjectId object, while productId is a string -> they need to be the same type to compare
+  //AKA the bug is fixed
   user.cartItems = user.cartItems.filter(
     item => item.product.toString() !== productId.toString()
   )
@@ -345,9 +347,14 @@ export async function createOrder(userId: Types.ObjectId | string, order: {
 
   //Create order in database
   const newOrder = await Orders.create(orderDoc);
+  
+  //Add order to user's orders array
+  user.orders.push(newOrder._id);
+  
   //Empty the cart after creating the order
   user.cartItems = [];
-  //Save changes to the DB
+  
+  //Save changes to the DB (both orders array and empty cart)
   await user.save();
 
   //Done!
