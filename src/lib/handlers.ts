@@ -3,6 +3,7 @@ import connect from '@/lib/mongoose';
 import { Types } from 'mongoose';
 import Users, { User, CartItem } from '@/models/User';
 import Orders, {Order} from '@/models/Order';
+import bcrypt from 'bcrypt';
 
 //Error response interface
 export interface ErrorResponse {
@@ -412,4 +413,26 @@ export async function getSingleOrder(
   if (!orderDoc) return null;
 
   return orderDoc;
+}
+
+export interface CheckCredentialsResponse {
+  _id: Types.ObjectId
+}
+
+//Check user credentials function
+export async function checkCredentials(
+  email: string,
+  password: string
+): Promise<CheckCredentialsResponse | null> { //Return null if credentials are invalid
+  const normalizedEmail = email.toLowerCase().trim();
+  const user = await Users.findOne({email: normalizedEmail});
+  
+  if (!user) return null;
+
+  const ok = await bcrypt.compare(password, user.password);
+  if (!ok) return null;
+
+  return {
+    _id: user._id
+  };
 }
