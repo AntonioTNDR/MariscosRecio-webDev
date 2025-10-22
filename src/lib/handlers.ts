@@ -34,17 +34,16 @@ export async function createUser(user: {
   if (prevUser.length !== 0) {
     return null;
   }
-
-  //Create user document
+  const hash = await bcrypt.hash(user.password, 10)
   const doc: User = {
-    ...user, //Spread user object
+    ...user,
+    password: hash,
     birthdate: new Date(user.birthdate),
     cartItems: [],
     orders: [],
-  };
+  }
 
-  //Create user in database
-  const newUser = await Users.create(doc);
+  const newUser = await Users.create(doc)
 
   //Return new user's id
   return {
