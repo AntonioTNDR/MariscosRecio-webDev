@@ -20,8 +20,8 @@ export async function GET(
       message: 'Authentication required.',
     },
     { status: 401 }
-  )
-}
+    )
+  }
 
   if (!Types.ObjectId.isValid(params.userId)) { //Check if userId is a valid ObjectId
     return NextResponse.json( //Return 400 if not
@@ -30,8 +30,8 @@ export async function GET(
         message: 'Invalid user ID.',
       },
       { status: 400 }
-    )
-  }
+      )
+    }
 
   if (session.userId.toString() !== params.userId) {
   return NextResponse.json(
@@ -40,8 +40,8 @@ export async function GET(
       message: 'Unauthorized access.',
     },
     { status: 403 }
-  )
-}
+    )
+  }
 
   const user = await getUser(params.userId)
 

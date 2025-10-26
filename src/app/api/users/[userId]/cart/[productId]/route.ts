@@ -1,13 +1,34 @@
 import { Types } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 import { deleteFromCart, ErrorResponse, putQty, GetProductsResponse, CartItemResponse, getCart, GetUserResponse } from '@/lib/handlers'
+import { getSession } from '@/lib/auth'
 
-
+//this endpoint needs authentication and authorization
 export async function PUT(
   req: Request, //Request object
   { params }: { params: { userId: string; productId: string } }
 ): Promise<NextResponse<{ cartItems: CartItemResponse[] } | ErrorResponse>> { //Define return type
 
+  const session = await getSession()
+  if (!session?.userId) {
+  return NextResponse.json(
+    {
+      error: 'NOT_AUTHENTICATED',
+      message: 'Authentication required.',
+    },
+    { status: 401 }
+    )
+  }
+
+  if (session.userId.toString() !== params.userId) {
+  return NextResponse.json(
+    {
+      error: 'NOT_AUTHORIZED',
+      message: 'Unauthorized access.',
+    },
+    { status: 403 }
+    )
+  }
   try{
     const { userId, productId } = params;
 
@@ -70,13 +91,24 @@ export async function PUT(
   );
 }
 
+//this method also needs authentication and authorization 
 //Defined in anex A: Remove a product from a user's cart
 export async function DELETE(
   req: Request, //Request object
   { params }: { params: { userId: string; productId: string } }
 ): Promise<NextResponse<GetUserResponse> | NextResponse<ErrorResponse>> { //Define return type, in this case either user or error response
   const { userId, productId } = params;
-
+  
+  const session = await getSession()
+  if (!session?.userId) {
+  return NextResponse.json(
+    {
+      error: 'NOT_AUTHENTICATED',
+      message: 'Authentication required.',
+    },
+    { status: 401 }
+    )
+  }
 
   //Validate IDs
   if (!Types.ObjectId.isValid(params.userId)) {
@@ -85,6 +117,16 @@ export async function DELETE(
         message: 'Invalid user ID.',
       },
       { status: 400 });
+  }
+
+  if (session.userId.toString() !== params.userId) {
+  return NextResponse.json(
+    {
+      error: 'NOT_AUTHORIZED',
+      message: 'Unauthorized access.',
+    },
+    { status: 403 }
+    )
   }
 
   if (!Types.ObjectId.isValid(params.productId)) {

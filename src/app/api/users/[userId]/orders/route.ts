@@ -1,6 +1,7 @@
 import { Types } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 import { ErrorResponse, getUser, GetUserResponse, GetSingleOrderResponse, CreateOrderResponse, getSingleOrder, createOrder, getOrder } from '@/lib/handlers'
+import { getSession } from '@/lib/auth' 
 
 //create a get and a put method here
 export async function POST(
@@ -11,6 +12,17 @@ export async function POST(
   try {
     // Await params (Next.js App Router requirement)
     const { userId } = await params;
+    const session = await getSession()
+      if (!session?.userId) { 
+      return NextResponse.json(
+        {
+          error: 'NOT_AUTHENTICATED',
+          message: 'Authentication required.',
+        },
+        { status: 401 }
+        )
+      }
+
 
     // Validate user ID first
     if (!Types.ObjectId.isValid(userId)) {
@@ -20,6 +32,16 @@ export async function POST(
           message: 'Invalid user ID.',
         },
         { status: 400 }
+      )
+    }
+
+    if (session.userId.toString() !== userId) {
+    return NextResponse.json(
+      {
+        error: 'NOT_AUTHORIZED',
+        message: 'Unauthorized access.',
+      },
+      { status: 403 }
       )
     }
 
@@ -84,6 +106,17 @@ export async function GET(
     // Await params (Next.js App Router requirement)
     const { userId } = await params;
 
+    const session = await getSession()
+      if (!session?.userId) {
+      return NextResponse.json(
+        {
+          error: 'NOT_AUTHENTICATED',
+          message: 'Authentication required.',
+        },
+        { status: 401 }
+        )
+      }
+
     // Validate user ID
     if (!Types.ObjectId.isValid(userId)) {
       return NextResponse.json(
@@ -92,6 +125,16 @@ export async function GET(
           message: 'Invalid user ID.',
         },
         { status: 400 }
+      )
+    }
+
+    if (session.userId.toString() !== userId) {
+    return NextResponse.json(
+      {
+        error: 'NOT_AUTHORIZED',
+        message: 'Unauthorized access.',
+      },
+      { status: 403 }
       )
     }
 
