@@ -423,6 +423,8 @@ export async function checkCredentials(
   email: string,
   password: string
 ): Promise<CheckCredentialsResponse | null> { //Return null if credentials are invalid
+  await connect();
+  
   const normalizedEmail = email.toLowerCase().trim();
   const user = await Users.findOne({email: normalizedEmail});
   
