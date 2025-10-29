@@ -1,6 +1,6 @@
 import Products, { Product } from '@/models/Product';
 import connect from '@/lib/mongoose';
-import { Types } from 'mongoose';
+import { isValidObjectId, Types } from 'mongoose';
 import Users, { User, CartItem } from '@/models/User';
 import Orders, {Order} from '@/models/Order';
 import bcrypt from 'bcrypt';
@@ -171,6 +171,11 @@ export async function putQty(
   qty: number
 ): Promise<GetCartResponse | null> { //Return null if user not found
   await connect()
+
+  
+  if(isValidObjectId(userId) === false || isValidObjectId(productId) === false){
+    throw new Error('Invalid user ID or product ID');
+  }
 
   // 1. Find user and product
   const user = await Users.findById(userId);

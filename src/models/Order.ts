@@ -42,10 +42,12 @@ const OrderSchema = new Schema<Order>({
       qty: {
         type: Number,
         required: true,
+        min: 1
     },
       price: {
         type: Number,
         required: true,
+        min: 0
       },
     },
   ],

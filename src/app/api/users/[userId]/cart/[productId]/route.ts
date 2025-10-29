@@ -70,6 +70,16 @@ export async function PUT(
   catch (error) {
     const message = (error as Error).message;
 
+    if (message === "Invalid user ID or product ID") {
+      return NextResponse.json(
+        {
+          error: 'WRONG_PARAMS',
+          message: message,
+        },
+        { status: 400 }
+      )
+    }
+
     if (message === "Product not found") {
       return NextResponse.json(
         {
