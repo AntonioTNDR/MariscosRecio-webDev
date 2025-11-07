@@ -92,7 +92,7 @@ export async function getProductById(
 
 //Get user response interface
 export interface GetUserResponse
-  extends Pick<User, 'email' | 'name' | 'surname' | 'address' | 'birthdate'> {
+  extends Pick<User, 'email' | 'name' | 'surname' | 'address' | 'birthdate' | 'cartItems'> {
   _id: Types.ObjectId
 }
 
