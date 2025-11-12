@@ -1,43 +1,16 @@
-import { redirect } from 'next/navigation'
-import { CartItemResponse, GetCartItemsResponse, GetCartResponse, GetUserResponse, getCart } from '@/lib/handlers'
-import Link from 'next/link'
-import { getSession } from '@/lib/auth'
+import ProductTile from '@/components/ProductTile'
+import { getProducts } from '@/lib/handlers'
 
-export default async function Cart() {
-  const session = await getSession()
-  if (!session) {
-    redirect('/auth/signin')
-  }
-
-  const cartItemsData: GetCartResponse | null = await getCart(session.userId)
-  if (!cartItemsData) {
-    redirect('/auth/signin')
-  }
+export default async function Index() {
+  const data = await getProducts()
 
   return (
     <div className='flex flex-col'>
-      <h3 className='pb-4 text-3xl font-bold text-gray-900 sm:pb-6 lg:pb-8'>
-        My Shopping Cart
-      </h3>
-      {cartItemsData.cartItems.length === 0 ? (
-        <div className='text-center'>
-          <span className='text-sm text-gray-400'>The cart is empty</span>
-        </div>
-      ) : (
-        <>
-          {cartItemsData.cartItems.map((cartItem: CartItemResponse) => (
-            <div key={cartItem.product._id.toString()}>
-              <Link href={`/products/${cartItem.product._id.toString()}`}>
-                {cartItem.product.name}
-              </Link>
-              <br />
-              {cartItem.qty}
-              <br />
-              {cartItem.product.price.toFixed(2) + ' €'}
-            </div>
-          ))}
-        </>
-      )}
+      <div className='grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8'>
+        {data.products.map((product) => (
+          <ProductTile key={product._id.toString()} product={product} />
+        ))}
+      </div>
     </div>
   )
 }
