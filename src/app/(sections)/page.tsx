@@ -1,7 +1,21 @@
 import { redirect } from 'next/navigation'
-import { CartItemResponse, GetCartResponse, getCart } from '@/lib/handlers'
+import { CartItem } from '@/models/User'
+import { getCart } from '@/lib/handlers'
 import Link from 'next/link'
 import { getSession } from '@/lib/auth'
+import { Product } from '@/models/Product'
+import { Types } from 'mongoose'
+
+// Define the populated cart item type
+interface PopulatedCartItem {
+  product: Product & { _id: Types.ObjectId }
+  qty: number
+}
+
+// Define the populated cart response type
+interface PopulatedCartResponse {
+  cartItems: PopulatedCartItem[]
+}
 
 export default async function Cart() {
   const session = await getSession()
@@ -9,8 +23,8 @@ export default async function Cart() {
     redirect('/auth/signin')
   }
 
-  const cartItemsData: GetCartResponse | null = await getCart(session.userId)
-  if (!cartItemsData) {
+  const cartData = await getCart(session.userId) as PopulatedCartResponse | null
+  if (!cartData) {
     redirect('/auth/signin')
   }
 
@@ -19,13 +33,13 @@ export default async function Cart() {
       <h3 className='pb-4 text-3xl font-bold text-gray-900 sm:pb-6 lg:pb-8'>
         My Shopping Cart
       </h3>
-      {cartItemsData.cartItems.length === 0 ? (
+      {cartData.cartItems.length === 0 ? (
         <div className='text-center'>
           <span className='text-sm text-gray-400'>The cart is empty</span>
         </div>
       ) : (
         <>
-          {cartItemsData.cartItems.map((cartItem: CartItemResponse) => (
+          {cartData.cartItems.map((cartItem) => (
             <div key={cartItem.product._id.toString()}>
               <Link href={`/products/${cartItem.product._id.toString()}`}>
                 {cartItem.product.name}
