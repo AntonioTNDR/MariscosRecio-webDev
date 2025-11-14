@@ -36,14 +36,13 @@ export default async function profile({
       <h4 className='pt-6 pb-4 text-2xl font-bold text-white-900 sm:pb-6 lg:pb-8'>
         Orders
       </h4>
-      {orders?.cartItems.length === 0 ? ( // Show message if no orders
+      {orders === null ? ( // Show message if no orders
         <div className='text-center'>
           <span className='text-sm text-gray-400'>No orders found</span>
         </div>
-      ) : ( //we just want the orderID and the address
+      ) : ( //we just want the orderID and the address AND since orders is an array we need to map through it
         <> 
-          <p>Order ID: {orders?._id.toString()}</p>
-          <p>Address: {orders?.address}</p>
+          
         </>
       )}
     </div>
