@@ -33,13 +33,13 @@ export default async function Cart() {
       <h3 className='pb-4 text-3xl font-bold text-gray-900 sm:pb-6 lg:pb-8'>
         My Shopping Cart
       </h3>
-      {cartData.cartItems.length === 0 ? (
+      {cartData.cartItems.length === 0 ? ( // Show message if cart is empty
         <div className='text-center'>
           <span className='text-sm text-gray-400'>The cart is empty</span>
         </div>
-      ) : (
+      ) : ( // Show cart items if cart is not empty
         <>
-          {cartData.cartItems.map((cartItem) => (
+          {cartData.cartItems.map((cartItem) => ( // Render each cart item
             <div key={cartItem.product._id.toString()}>
               <Link href={`/products/${cartItem.product._id.toString()}`}>
                 {cartItem.product.name}

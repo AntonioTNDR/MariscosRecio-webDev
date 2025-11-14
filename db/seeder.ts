@@ -31,7 +31,7 @@ const products: Product[] = [
     name: 'Earthen Bottle',
     description: 'What a bottle!',
     price: 39.95,
-    image: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg',
+    image: 'https://e01-elmundo.uecdn.es/assets/multimedia/imagenes/2024/02/23/17087044090359.jpg',
   },
   {
     name: 'Nomad Tumbler',
