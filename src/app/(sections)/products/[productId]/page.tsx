@@ -22,12 +22,27 @@ export default async function Product({
   const product = productData.products[0]
 
   return (
-    <div className='flex flex-col'>
-      <h3 className='pb-4 text-3xl font-bold text-gray-900 sm:pb-6 lg:pb-8'>
-        {product.name}
-      </h3>
-      {product.description && <p>{product.description}</p>}
-      {/* Here you should show the details of the product. */}
+    <div className='flex flex-col space-y-8'>
+      <div className='flex flex-col'>
+        <h1 className='pb-4 text-3xl font-bold text-white-900 sm:pb-6 lg:pb-8'>
+          {product.name}
+        </h1>
+      </div>
+
+      <div className='flex flex-col'>
+        <h1 className='pb-4 text-3xl font-bold text-white-900 sm:pb-6 lg:pb-8'>
+        {product.description}
+        </h1>
+      </div>
+      
+      <div className='flex flex-col'>
+        <img 
+        src={product.image}
+        alt={product.name}
+        className='h-full w-full object-cover object-center group-hover:opacity-75'
+        />
+      </div>
+
     </div>
   )
 }
