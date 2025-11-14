@@ -6,6 +6,7 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: 'media', // Usa 'media' para detectar automáticamente o 'class' para control manual
   theme: {
     extend: {
       colors: {
