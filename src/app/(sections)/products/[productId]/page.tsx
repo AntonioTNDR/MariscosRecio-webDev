@@ -22,27 +22,36 @@ export default async function Product({
   const product = productData.products[0]
 
   return (
-    <div className='flex flex-col space-y-8'>
-      <div className='flex flex-col'>
-        <h1 className='pb-4 text-3xl font-bold text-white-900 sm:pb-6 lg:pb-8'>
-          {product.name}
-        </h1>
-      </div>
-
-      <div className='flex flex-col'>
-        <h1 className='pb-4 text-3xl font-bold text-white-900 sm:pb-6 lg:pb-8'>
-        {product.description}
-        </h1>
-      </div>
-      
-      <div className='flex flex-col'>
+    <div className='flex flex-col lg:flex-row lg:space-x-8 space-y-8 lg:space-y-0'>
+      {/* Imagen - izquierda en pantallas grandes, arriba en móvil */}
+      <div className='flex flex-col lg:w-1/2'>
         <img 
-        src={product.image}
-        alt={product.name}
-        className='h-full w-full object-cover object-center group-hover:opacity-75'
+          src={product.image}
+          alt={product.name}
+          className='w-full h-auto object-cover object-center rounded-lg'
         />
       </div>
 
+      {/* Información del producto - derecha en pantallas grandes, abajo en móvil */}
+      <div className='flex flex-col space-y-6 lg:w-1/2'>
+        <div className='flex flex-col'>
+          <h1 className='text-3xl font-bold text-gray-900 dark:text-gray-100'>
+            {product.name}
+          </h1>
+        </div>
+
+        <div className='flex flex-col'>
+          <p className='text-lg text-gray-700 dark:text-gray-300'>
+            {product.description}
+          </p>
+        </div>
+
+        <div className='flex flex-col'>
+          <p className='text-2xl font-semibold text-gray-900 dark:text-gray-100'>
+            {product.price.toFixed(2)} €
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
