@@ -21,11 +21,11 @@ export default async function Navbar() {
             >
               <img
                 className='block h-8 w-auto'
-                src='/img/logo.svg'
-                alt='GameShop logo'
+                src='/img/Mariscos_Recio_Logotipo.webp'
+                alt='Mariscos Recio logo'
               />
               <div className='inline-block w-auto text-xl font-semibold'>
-                GameShop
+                Mariscos Recio
               </div>
             </Link>
           </div>
