@@ -46,6 +46,30 @@ const insertedProducts = await Products.insertMany(products);
 
 const hashedPassword = await bcrypt.hash('1234', 10);
 
+// Create an order first
+const order: Order = {
+  date: new Date(),
+  address: '123 Main St, 12345 New York, United States',
+  cardHolder: 'John Doe',
+  cardNumber: '1234567812345678',
+  orderItems: [
+    {
+      product: insertedProducts[0]._id,
+      qty: 2,
+      price: insertedProducts[0].price * 2,
+    },
+    {
+      product: insertedProducts[1]._id,
+      qty: 5,
+      price: insertedProducts[1].price * 5,
+    },
+  ],
+};
+
+const createdOrder = await Orders.create(order);
+console.log('Created order:', JSON.stringify(createdOrder, null, 2));
+
+// Now create user with the order reference
 const user: User = {
   email: 'johndoe@example.com',
   password: hashedPassword,
@@ -63,48 +87,28 @@ const user: User = {
       qty: 5,
     },
   ],
-  orders: [],
+  orders: [createdOrder._id], // Add the order ID here
 };
-
 
 const res = await Users.create(user);
-console.log(JSON.stringify(res, null, 2));
+console.log('Created user:', JSON.stringify(res, null, 2));
 
 const userProjection = {
-name: true,
-surname: true,
+  name: true,
+  surname: true,
+  email: true,
+  orders: true,
 };
 const productProjection = {
-name: true,
-price: true,
+  name: true,
+  price: true,
 };
 
-const order: Order = {
-  date: new Date(now()),
-  address: '123 Main St, 12345 New York, United States',
-  cardHolder: 'John Doe',
-  cardNumber: '1234567812345678',
-  orderItems: [
-    {
-      product: insertedProducts[0]._id,
-      qty: 2,
-      price: insertedProducts[0].price,
-    },
-    {
-      product: insertedProducts[1]._id,
-      qty: 5,
-      price: insertedProducts[1].price,
-    },
-  ],
-}
-
-const createdOrder = await Orders.create(order);
-console.log(JSON.stringify(createdOrder, null, 2));
-
 const retrievedUser = await Users
-.findOne({ email: 'johndoe@example.com' }, userProjection)
-.populate('cartItems.product', productProjection);
-console.log(JSON.stringify(retrievedUser, null, 2));
+  .findOne({ email: 'johndoe@example.com' }, userProjection)
+  .populate('cartItems.product', productProjection)
+  .populate('orders');
+console.log('Retrieved user with orders:', JSON.stringify(retrievedUser, null, 2));
 
 await conn.disconnect();
 }
