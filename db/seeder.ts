@@ -39,6 +39,12 @@ const products: Product[] = [
     price: 39.95,
     image: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg',
   },
+  {
+    name: 'Lobster',
+    description: 'Raw lobster, frozen to preserve its freshness and flavour. Ideal for preparing sophisticated dishes such as paellas or stews, its firm and tasty meat is perfect for a special meal. Ready to cook and enjoy the taste of the sea.',
+    price: 49.95,
+    image: 'https://lasirena.vtexassets.com/arquivos/ids/371751-800-800?v=638626928181430000&width=800&height=800&aspect=true',
+  }
 ];
 
 
