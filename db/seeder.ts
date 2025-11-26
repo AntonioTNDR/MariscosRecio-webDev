@@ -28,23 +28,35 @@ await conn.connection.db.dropDatabase();
 
 const products: Product[] = [
   {
-    name: 'Earthen Bottle',
-    description: 'What a bottle!',
-    price: 39.95,
-    image: 'https://e01-elmundo.uecdn.es/assets/multimedia/imagenes/2024/02/23/17087044090359.jpg',
-  },
-  {
-    name: 'Nomad Tumbler',
-    description: 'Yet another item',
-    price: 39.95,
-    image: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg',
-  },
-  {
     name: 'Lobster',
     description: 'Raw lobster, frozen to preserve its freshness and flavour. Ideal for preparing sophisticated dishes such as paellas or stews, its firm and tasty meat is perfect for a special meal. Ready to cook and enjoy the taste of the sea.',
-    price: 49.95,
+    price: 12.99,
     image: 'https://lasirena.vtexassets.com/arquivos/ids/371751-800-800?v=638626928181430000&width=800&height=800&aspect=true',
-  }
+  },
+  {
+    name: 'Mussles',
+    description: 'Galician mussels in their own juice, frozen to preserve their freshness, are a true delicacy from the sea. Organically farmed, these mussels are perfect to enjoy on their own or in traditional recipes. Add a touch of quality and flavour to your dishes with this sustainable option!',
+    price: 4.99,
+    image: 'https://lasirena.vtexassets.com/arquivos/ids/371755-800-800?v=638626935382870000&width=800&height=800&aspect=true',
+  },
+  {
+    name: 'Prawns',
+    description: 'Salted prawns, carefully prepared to offer an authentic sea flavour and tender texture. Frozen to preserve their freshness, they are perfect for use in a variety of recipes, from tapas to main courses. A delicious and versatile option for seafood lovers!',
+    price: 6.99,
+    image: 'https://lasirena.vtexassets.com/arquivos/ids/371741-800-800?v=638786637727430000&width=800&height=800&aspect=true'
+  },
+  {
+    name: 'Razor clamb (500 grams)',
+    description: "Recio's Seafood frozen razor clams are ideal for preparing seafood dishes with an authentic and delicate flavour. Frozen to preserve their freshness and texture, they are perfect for traditional or gourmet recipes. Shop at Recio's Seafood and enjoy high-quality razor clams that will add a special touch to your meals.",
+    price: 4.99,
+    image: 'https://lasirena.vtexassets.com/arquivos/ids/373615-800-800?v=638702188442730000&width=800&height=800&aspect=true',
+  },
+  {
+    name: 'Premium Sea Bass (180g pack)',
+    description: "Recio's Seafood frozen razor clams are ideal for preparing seafood dishes with an authentic and delicate flavour. Frozen to preserve their freshness and texture, they are perfect for traditional or gourmet recipes. Shop at Recio's Seafood and enjoy high-quality razor clams that will add a special touch to your meals.",
+    price: 5.99,
+    image: '/img/lubina.webp',
+  },
 ];
 
 

@@ -8,7 +8,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'WES App',
+  title: "Recio's Seafood",
   description: 'Base files for the WES course',
 }
 

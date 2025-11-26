@@ -25,7 +25,7 @@ export default async function Navbar() {
                 alt='Mariscos Recio logo'
               />
               <div className='inline-block w-auto text-xl font-semibold'>
-                Mariscos Recio
+                Recio&apos;s Seafood
               </div>
             </Link>
           </div>
