@@ -111,7 +111,12 @@ export default async function CheckoutPage() {
             </div>
 
             {/*Checkout form*/}
-            <div className='space-y-6 mt-8'>
+            <form className='bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6'>
+              <h2 className='text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4'>
+              Shipping & Payment Information
+              </h2>
+              
+              <div className='space-y-6 mt-8'>
                 {/* Shipping address */}
                 <div>
                   <label
@@ -128,7 +133,55 @@ export default async function CheckoutPage() {
                     className='w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500'
                     />
                 </div>
-            </div>
+
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                  {/* Card Holder*/}
+                  <div>
+                  <label 
+                    htmlFor='cardHolder' 
+                    className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'
+                  >
+                    Card Holder
+                  </label>
+                  <input
+                    type='text'
+                    id='cardHolder'
+                    name='cardHolder'
+                    required
+                    placeholder='Foo Bar'
+                    className='w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500'
+                  />
+                  </div>
+
+                  {/* Card Number */}
+                  <div>
+                    <label 
+                      htmlFor='cardNumber' 
+                      className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'
+                    >
+                      Card Number
+                    </label>
+                    <input
+                      type='text'
+                      id='cardNumber'
+                      name='cardNumber'
+                      required
+                      //pattern='[0-9]{16}'
+                      maxLength={16}
+                      placeholder='0000111122223333'
+                      className='w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500'
+                    />
+                  </div>
+                </div>
+                
+                {/* Submit button */}
+                <div className='flex justify-center pt-4'>
+                  <button type='submit' className='rounded-md bg-gray-900 dark:bg-gray-700 px-8 py-3 text-sm font-semibold text-white hover:bg-gray-800 dark:hover:bg-gray-600 focus:ring-2 focus:ring-gray-900 focus:ring-offset-2'>
+                    Purchase
+                  </button>
+                </div>
+              </div>
+            </form>
           </>
         )}
       </div>
