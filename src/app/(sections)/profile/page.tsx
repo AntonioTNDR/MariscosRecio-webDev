@@ -4,9 +4,14 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getOrder, getUser, GetUserResponse } from "@/lib/handlers";
 import { getSession } from "@/lib/auth";
+import { Order } from "@/models/Order";
 
 interface ProfilePageProps {
   user: User & { _id: Types.ObjectId };
+}
+
+interface PopulatedOrdersResponse {
+  orders: (Order & { _id: Types.ObjectId })[];
 }
 
 export default async function profile({
@@ -14,12 +19,13 @@ export default async function profile({
 }: {
   params: { userId: string }
 }) {
-  const session = await getSession()
-  const orders = await getOrder(params.userId)
+    const session = await getSession()
     if (!session) {
       redirect('/auth/signin')
     }
-  
+    
+    const orders = await getOrder(session.userId) as PopulatedOrdersResponse | null
+
     const userData = await getUser(session.userId) as GetUserResponse | null
     if (!userData) {
       redirect('/auth/signin')
@@ -30,7 +36,7 @@ export default async function profile({
       <h3 className='pb-4 text-3xl font-bold text-white-900 sm:pb-6 lg:pb-8'>
         User Profile
       </h3>
-      <p>Name: {userData.name} {userData.surname}</p>
+      <p className='font semi-bold'>Name: {userData.name} {userData.surname}</p>
       <p>Email: {userData.email}</p>
       <p>Address: {userData.address}</p>
       <h4 className='pt-6 pb-4 text-2xl font-bold text-white-900 sm:pb-6 lg:pb-8'>
