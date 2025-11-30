@@ -112,7 +112,36 @@ export default async function profile({
             </div>
 
             {/* Orders List */}
-            
+            <div className= 'bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700'>
+              {orders.orders.map((order) => (
+                <Link 
+                key={order._id.toString()}
+                href={`/orders/${order._id.toString()}`}
+                className='grid grid-cols-3 gap-4 px-6 py-4 hover:bg-gray-500 dark:hover:bg-gray-700 transition-colors cursor-pointer'
+                >
+                  <div className='text-sm text-gray-900 dark:text-gray-100'>
+                    <div className='font-mono'>
+                      {order._id.toString()}
+                    </div>
+                  </div>
+
+                  <div className='text-sm text-gray-900 dark:text-gray-100'>
+                    <div className='font-mono'>
+                      {order.address}
+                    </div>
+                  </div>
+
+                  <div className='text-sm text-gray-900 dark:text-gray-100'>
+                    <div className='font-mono'>
+                      {order.cardHolder}
+                      {order.cardNumber ? ` - **** **** **** ${order.cardNumber.slice(-4)}` : ''}
+                    </div>
+                  </div>
+                  
+                </Link>
+
+              ))}
+            </div>
           </div>  
         </>
       )}
