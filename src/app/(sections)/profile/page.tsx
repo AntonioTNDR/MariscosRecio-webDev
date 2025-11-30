@@ -97,9 +97,23 @@ export default async function profile({
         </div>
       ) : ( //we just want the orderID and the address AND since orders is an array we need to map through it
         <> 
-          <div className=''>
+          <div className='bg-white dark:gb-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden'>
+            {/* Table Header */}
+            <div className='grid grid-cols-3 gap-4 px-6 py-3 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700'>
+              <div className='text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
+                Order ID
+              </div>
+              <div className='text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
+                Shipment Address
+              </div>
+              <div className='text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
+                Payment Information
+              </div>
+            </div>
 
-          </div>
+            {/* Orders List */}
+            
+          </div>  
         </>
       )}
       </div>

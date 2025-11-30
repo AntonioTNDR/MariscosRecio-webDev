@@ -53,7 +53,7 @@ const products: Product[] = [
   },
   {
     name: 'Premium Sea Bass (180g pack)',
-    description: "Recio's Seafood frozen razor clams are ideal for preparing seafood dishes with an authentic and delicate flavour. Frozen to preserve their freshness and texture, they are perfect for traditional or gourmet recipes. Shop at Recio's Seafood and enjoy high-quality razor clams that will add a special touch to your meals.",
+    description: 'High-quality frozen sea bass fillets, guaranteed freshness. Ideal for preparing healthy and delicious recipes. Perfect for keeping your meals balanced and full of flavour. Buy now at Recio\'s Seafood and enjoy premium fish at the best price. The perfect choice for your kitchen!',
     price: 5.99,
     image: '/img/lubina.webp',
   },
