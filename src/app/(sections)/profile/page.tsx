@@ -30,6 +30,11 @@ export default async function profile({
     if (!userData) {
       redirect('/auth/signin')
     }
+    const formattedDate = new Date(userData.birthdate).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    })
 
     return (
       <div className='flex flex-col space-y-8 max-w-6xl mx-auto'>
@@ -80,7 +85,7 @@ export default async function profile({
               </span>
 
               <span className='text-gray-900 dark:text-gray-100 font-medium'>
-                {userData.birthdate.toDateString()}
+                {formattedDate}
               </span>
             </div>
 
