@@ -2,6 +2,8 @@ import { Types } from 'mongoose'
 import { notFound } from 'next/navigation'
 import { getProductById } from '@/lib/handlers'
 import { useState } from 'react'
+import CartItemCounter from '@/components/CartItemCounter'
+import { getSession } from '@/lib/auth'
 
 
 
@@ -19,9 +21,9 @@ export default async function Product({
     notFound()
   }
 
+  const session = await getSession()
 
-
-  // Extract the product details
+    // Extract the product details
   // I made this since getProductById returns an array of products, so that 
   // we can reuse the same handler for multiple product IDs in the future.
   const product = productData.products[0]
@@ -38,32 +40,14 @@ export default async function Product({
           alt={product.name}
           className='w-full h-auto object-cover object-center rounded-lg'
         />
-        <div className='flex flex-row items-center gap-2 border border-gray-300 dark:border-gray-600 rounded-md p-2 w-fit'>
-                  <button
-                    // onClick={() => {
-                    //   if (qty > 0) {  // Only decrease if qty is greater than 0
-                    //     qty = qty - 1
-                    //   }
-                    // }}
-                    className='px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition'
-                  >
-                    -
-                  </button>
-
-                  {/* Display quantity */}
-                  <div className='text-center text-gray-900 dark:text-gray-100 min-w-[2rem]'>
-                    aquí iría la cantidad
-                    {/*qty*/}
-                  </div>
-
-                  <button
-                    //onClick={() => qty = qty + 1}
-                    className='px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition'
-                  >
-                    +
-                  </button>
-                </div>
-
+        
+        {session && (
+          <CartItemCounter
+            userId={session.userId}
+            productId={product._id.toString()}
+            value={0}
+          />
+        )}
       </div>
 
       {/* Información del producto - derecha en pantallas grandes, abajo en móvil */}
