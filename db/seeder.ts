@@ -57,6 +57,12 @@ const products: Product[] = [
     price: 5.99,
     image: '/img/lubina.webp',
   },
+  {
+    name: "Five-star New Year's Eve dinner",
+    description: "Five-star New Year's Eve dinner with twelve prawns, two black prawns and a spider crab for €69.99, with a complimentary cider pourer!!!! Limited stock available, order now to ensure your festive feast!",
+    price: 69.99,
+    image: 'img/navidad_mariscos.png',
+  },
 ];
 
 
