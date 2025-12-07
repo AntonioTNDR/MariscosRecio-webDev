@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { getSession } from '@/lib/auth'
 import { Product } from '@/models/Product'
 import { Types } from 'mongoose'
+import CartItemCounter from '@/components/CartItemCounter'
 
 // Define the populated cart item type
 interface PopulatedCartItem {
@@ -74,31 +75,19 @@ export default async function Cart() {
                   
                 </div>
 
-                {/* Price */}
-                <div className='text-right flex-shrink-0'>
+                {/* Cart Counter and Price */}
+                <div className='flex flex-col items-end gap-3'>
+                  {/*Add or remove quantity of products*/}
+                  <CartItemCounter
+                    userId={session.userId}
+                    productId={cartItem.product._id.toString()}
+                    value={cartItem.qty}
+                  />
+                  
+                  {/* Price */}
                   <p className='text-xl font-bold text-gray-900 dark:text-gray-100'>
                     {(cartItem.product.price * cartItem.qty).toFixed(2)} €
                   </p>
-                </div>
-
-                {/*Add or remove quantity of products*/}
-                <div className='flex flex-row items-center gap-2 border border-gray-300 dark:border-gray-600 rounded-md p-2'>
-                  <button
-                    className='px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition'
-                  >
-                    -
-                  </button>
-
-                  {/* Display quantity */}
-                  <div className='text-center text-gray-900 dark:text-gray-100 min-w-[2rem]'>
-                    {cartItem.qty}
-                  </div>
-
-                  <button
-                    className='px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition'
-                  >
-                    +
-                  </button>
                 </div>
                 
               </div>
