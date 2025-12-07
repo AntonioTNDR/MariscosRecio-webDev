@@ -56,6 +56,19 @@ export default function CartItemCounter({
     }
   }
 
+  const onDeleteBtnClick = async function () {
+    setIsUpdating(true)
+
+    try{
+      await fetch(`/api/users/${userId}/cart/${productId}`, {
+        method: 'DELETE',
+      })
+      router.refresh()
+    } finally {
+      setIsUpdating(false)
+    }
+  }
+
   return (
     <div className='flex flex-row items-center gap-2 border border-gray-300 dark:border-gray-600 rounded-md p-2 w-fit'>
           <button
