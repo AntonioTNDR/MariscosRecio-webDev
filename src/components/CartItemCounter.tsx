@@ -24,6 +24,9 @@ export default function CartItemCounter({
     try {
       await fetch(`/api/users/${userId}/cart/${productId}`, {
         method: 'PUT',
+        headers: {
+          'Content-Type': 'applim, ns cation/json',
+        },
         body: JSON.stringify({
           qty: value + 1,
         }),
@@ -40,6 +43,9 @@ export default function CartItemCounter({
     try {
       await fetch(`/api/users/${userId}/cart/${productId}`, {
         method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           qty: value - 1,
         }),

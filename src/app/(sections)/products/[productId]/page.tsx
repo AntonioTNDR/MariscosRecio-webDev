@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
 import { notFound } from 'next/navigation'
-import { getProductById } from '@/lib/handlers'
+import { getCart, getProductById } from '@/lib/handlers'
 import { useState } from 'react'
 import CartItemCounter from '@/components/CartItemCounter'
 import { getSession } from '@/lib/auth'
@@ -16,21 +16,34 @@ export default async function Product({
     notFound()
   }
 
+  let qty = 0;
+
   const productData = await getProductById(params.productId)
   if (productData === null) {
     notFound()
   }
 
+  
   const session = await getSession()
+  
+  // Get cart data if user is authenticated
+  if (session) {
+    const cartData = await getCart(session.userId)
+    if (cartData) {
+      const cartItem = cartData.cartItems.find(
+        (item) => item.product._id.toString() === params.productId
+      )
+      if (cartItem) {
+        qty = cartItem.qty
+      }
+    }
+  }
 
-    // Extract the product details
+  // Extract the product details
   // I made this since getProductById returns an array of products, so that 
   // we can reuse the same handler for multiple product IDs in the future.
   const product = productData.products[0]
-
-  // Placeholder for quantity logic
-  // let qty = 0
-
+  
   return (
     <div className='flex flex-col lg:flex-row lg:space-x-8 space-y-8 lg:space-y-0'>
       {/* Imagen - izquierda en pantallas grandes, arriba en móvil */}
@@ -45,7 +58,7 @@ export default async function Product({
           <CartItemCounter
             userId={session.userId}
             productId={product._id.toString()}
-            value={0}
+            value={qty}
           />
         )}
       </div>
