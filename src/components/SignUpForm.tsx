@@ -31,11 +31,8 @@ export default function SignInForm() {
     if (!event.currentTarget.checkValidity()) {
       return false
     }
-    const res = await fetch('/api/auth/signup', {
+    const res = await fetch('/api/users', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       body: JSON.stringify({
         ...formValues,
       }),
