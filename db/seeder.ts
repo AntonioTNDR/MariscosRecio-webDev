@@ -58,6 +58,18 @@ const products: Product[] = [
     image: '/img/lubina.webp',
   },
   {
+    name: 'Clams (1Kg pack)',
+    description: 'Recio\'s Seafood Pacific clams, frozen to maintain their freshness, are ideal for preparing exquisite seafood dishes. With their tender meat and delicate flavor, they are perfect for stews, paellas, or as an appetizer. Enjoy the authentic taste of the sea with these high-quality clams!',
+    price: 5.99,
+    image: 'https://lasirena.vtexassets.com/arquivos/ids/355120-600-600?v=638550121815300000&width=600&height=600&aspect=true%20600w,https://lasirena.vtexassets.com/arquivos/ids/355120-800-800?v=638550121815300000&width=800&height=800&aspect=true%20800w,https://lasirena.vtexassets.com/arquivos/ids/355120-1200-1200?v=638550121815300000&width=1200&height=1200&aspect=true%201200w',
+  },
+  {
+    name: 'Sardines (500g pack)',
+    description: 'Rich in omega-3, our sardine fillets maintain their freshness and characteristic flavor thanks to our freezing process. Ideal for salads, sandwiches, or main dishes, they offer a nutritious and delicious option. Shop at Recio\'s Seafood and enrich your meals with this healthy choice. Healthy and tasty!',
+    price: 5.99,
+    image: 'https://lasirena.vtexassets.com/arquivos/ids/371753-1600-1600?v=638817659599130000&width=1600&height=1600&aspect=true',
+  },
+  {
     name: "Five-star New Year's Eve dinner",
     description: "Five-star New Year's Eve dinner with twelve prawns, two black prawns and a spider crab for €69.99, with a complimentary cider pourer!!!! Limited stock available, order now to ensure your festive feast!",
     price: 69.99,
