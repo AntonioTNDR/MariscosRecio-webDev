@@ -170,10 +170,10 @@ export default async function orderPage({
 
           <div className="flex justify-start">
             <Link
-              href="/profile"
+              href="/"
               className="inline-block px-6 py-3 bg-sky-600 text-white text-sm font-medium rounded-md hover:bg-sky-700 transition"
             >
-              Back to User Profile
+              Continue Shopping
             </Link>
           </div>
         </div>
