@@ -1,6 +1,8 @@
 # 🦞 Mariscos Recio — Web
 
 > Sitio web "oficial" para **Mariscos Recio**. Desde esta web podrás crear ver el pescado más fresco de mi pescadería. Orgullos patrocinadores de Los Leones de Montepinar F.C.
+> Esta web está en **Inglés**, ya que se trata del trabajo de la asignatura "Ingeniería Web y Servicios" del grado en Ingeniería Informática de la ESIIAB (Escuela Superior de Ingeniería Informática de Albacete).
+> **ESTA WEB NO HA SIDO DISEÑADA PARA SU USO EN PRODUCCIÓN, POR LO QUE SE DESACONSEJA SU USO EN UN ENTORNO REAL**
 
 <!-- Captura de pantalla (opcional pero recomendado) -->
 <!-- ![Preview](public/img/preview.png) -->
