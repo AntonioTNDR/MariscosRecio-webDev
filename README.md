@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🦞 Mariscos Recio — Web
 
-## Getting Started
+> Sitio web "oficial" para **Mariscos Recio**. Desde esta web podrás crear ver el pescado más fresco de mi pescadería. Orgullos patrocinadores de Los Leones de Montepinar F.C.
 
-First, run the development server:
+<!-- Captura de pantalla (opcional pero recomendado) -->
+<!-- ![Preview](public/img/preview.png) -->
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🛠️ Stack tecnológico
+
+| Tecnología | Uso |
+|---|---|
+| [Next.js 14](https://nextjs.org/) | Framework React con App Router |
+| [TypeScript](https://www.typescriptlang.org/) | Tipado estático |
+| [Tailwind CSS](https://tailwindcss.com/) | Estilos utility-first |
+| ESLint + Prettier | Linting y formateo de código |
+
+---
+
+## 📁 Estructura del proyecto
+
+```
+MariscosRecio-webDev/
+├── src/              # Código fuente (componentes, páginas, lógica)
+├── public/
+│   └── img/          # Imágenes estáticas
+├── db/               # Base de datos / esquema
+├── .env.local        # Variables de entorno (no incluido en el repo)
+├── next.config.mjs
+├── tailwind.config.ts
+└── tsconfig.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Instalación y uso
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Prerrequisitos
 
-## Learn More
+- Node.js 18+
+- npm / yarn / pnpm
 
-To learn more about Next.js, take a look at the following resources:
+### Pasos
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/AntonioTNDR/MariscosRecio-webDev.git
+cd MariscosRecio-webDev
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# 2. Instalar dependencias
+npm install
 
-## Deploy on Vercel
+# 3. Configurar variables de entorno
+cp .env.local.example .env.local
+# Edita .env.local con tus valores
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# 4. Arrancar el servidor de desarrollo
+npm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+
+---
+
+## 📜 Scripts disponibles
+
+| Comando | Descripción |
+|---|---|
+| `npm run dev` | Servidor de desarrollo con hot-reload |
+| `npm run build` | Build optimizado para producción |
+| `npm run start` | Arrancar el servidor de producción |
+| `npm run lint` | Análisis de código con ESLint |
+
+---
+
+## ⚙️ Variables de entorno
+
+Crea un archivo `.env.local` en la raíz del proyecto con las siguientes variables:
+
+```env
+# Ejemplo — añade aquí las tuyas
+DATABASE_URL=...
+NEXT_PUBLIC_API_URL=...
+```
+
+---
+
+## 👤 Autor
+
+**Antonio Tendero Beltrán**
+
+---
+
+## 📄 Licencia
+
+Este proyecto es de uso privado.
