@@ -79,9 +79,9 @@ Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 Crea un archivo `.env.local` en la raíz del proyecto con las siguientes variables:
 
 ```env
-# Ejemplo — añade aquí las tuyas
-DATABASE_URL=...
-NEXT_PUBLIC_API_URL=...
+
+DATABASE_URL=mongodb://127.0.0.1:27017/
+NEXT_PUBLIC_API_URL=SuperSecretKey
 ```
 
 ---
